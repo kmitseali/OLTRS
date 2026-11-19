@@ -43,7 +43,7 @@ pipeline {
         
 stage('Docker Build') {
     steps {
-        bat 'docker build -t YOUR_DOCKERHUB_USERNAME/oltrs:latest .'
+        bat 'docker build -t kmitse/oltrs:latest .'
     }
 }
 
@@ -51,8 +51,8 @@ stage('Docker Push') {
     steps {
         withCredentials([usernamePassword(
             credentialsId: 'dockerhub-credentials',
-            usernameVariable: 'kmitseali',
-            passwordVariable: 'dckr_pat_yoTOjh3cLy6nxwYLfnPkmgKyvC8'
+            usernameVariable: 'DOCKER_USER',
+            passwordVariable: 'DOCKER_TOKEN'
         )]) {
             bat '''
                 echo %DOCKER_TOKEN% | docker login -u %DOCKER_USER% --password-stdin
