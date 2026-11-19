@@ -40,5 +40,28 @@ pipeline {
         war: 'target/*.war'
     }
 }
+        
+stage('Docker Build') {
+    steps {
+        bat 'docker build -t YOUR_DOCKERHUB_USERNAME/oltrs:latest .'
+    }
+}
+
+stage('Docker Push') {
+    steps {
+        withCredentials([usernamePassword(
+            credentialsId: 'dockerhub-credentials',
+            usernameVariable: 'DOCKER_USER',
+            passwordVariable: 'DOCKER_TOKEN'
+        )]) {
+            bat '''
+                echo %DOCKER_TOKEN% | docker login -u %DOCKER_USER% --password-stdin
+                docker push %DOCKER_USER%/oltrs:latest
+                docker logout
+            '''
+        }
+    }
+}
+
     }
 }
