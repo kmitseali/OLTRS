@@ -28,5 +28,17 @@ pipeline {
                                  fingerprint: true
             }
         }
+        stage('Deploy to Tomcat') {
+    steps {
+        deploy adapters: [
+            tomcat9(
+                credentialsId: 'tomcat-credentials',
+                url: 'http://localhost:8085'
+            )
+        ],
+        contextPath: 'ticket-reservation',
+        war: 'target/*.war'
+    }
+}
     }
 }
